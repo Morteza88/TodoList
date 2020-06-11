@@ -164,7 +164,7 @@ namespace TodoListApp.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "c21a64d4-2651-4416-8ffb-04d51f845210",
+                            ConcurrencyStamp = "018366ef-9dcc-4f6e-9f12-ed3a2b5d38e0",
                             Description = "Admin role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -172,7 +172,7 @@ namespace TodoListApp.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7c6d07a4-238f-4eb0-924d-083b6f60e48d",
+                            ConcurrencyStamp = "49ede7ce-053a-4b1d-8da3-927f79f25c92",
                             Description = "Employee role",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
@@ -302,7 +302,7 @@ namespace TodoListApp.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9bbd4784-01c3-43f4-ad91-57c03d7cb6b8",
+                            ConcurrencyStamp = "ba1b2f39-327c-4a95-b576-5b91d21f8fd0",
                             Email = "admin@email.com",
                             EmailConfirmed = true,
                             FullName = "Administrator",
@@ -310,8 +310,9 @@ namespace TodoListApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@email.com",
                             NormalizedUserName = "admin",
+                            PasswordHash = "AQAAAAEAACcQAAAAECPkaHj0qvY5OoxKMQWwmq3Oas8Epa1GCHSg2zQpJJzv5TbMyYb4w7opAYBRsWAISA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a5c44284-ae95-4e3c-8a6f-15a45e95d79c",
+                            SecurityStamp = "0e38e080-969a-43cc-ad8c-c65647acf69f",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });

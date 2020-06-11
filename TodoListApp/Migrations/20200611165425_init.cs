@@ -196,17 +196,17 @@ namespace TodoListApp.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { 1, "c21a64d4-2651-4416-8ffb-04d51f845210", "Admin role", "Admin", "ADMIN" });
+                values: new object[] { 1, "018366ef-9dcc-4f6e-9f12-ed3a2b5d38e0", "Admin role", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { 2, "7c6d07a4-238f-4eb0-924d-083b6f60e48d", "Employee role", "Employee", "EMPLOYEE" });
+                values: new object[] { 2, "49ede7ce-053a-4b1d-8da3-927f79f25c92", "Employee role", "Employee", "EMPLOYEE" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "IsActive", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "9bbd4784-01c3-43f4-ad91-57c03d7cb6b8", "admin@email.com", true, "Administrator", true, false, null, "admin@email.com", "admin", null, null, false, "a5c44284-ae95-4e3c-8a6f-15a45e95d79c", false, "Admin" });
+                values: new object[] { 1, 0, "ba1b2f39-327c-4a95-b576-5b91d21f8fd0", "admin@email.com", true, "Administrator", true, false, null, "admin@email.com", "admin", "AQAAAAEAACcQAAAAECPkaHj0qvY5OoxKMQWwmq3Oas8Epa1GCHSg2zQpJJzv5TbMyYb4w7opAYBRsWAISA==", null, false, "0e38e080-969a-43cc-ad8c-c65647acf69f", false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

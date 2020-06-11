@@ -34,11 +34,13 @@ namespace TodoListApp.Data
                     NormalizedName = "EMPLOYEE"
                 }
             );
+            var hasher = new PasswordHasher<User>();
             builder.Entity<User>().HasData(
                 new User
                 {
                     Id = 1,
                     UserName = "Admin",
+                    PasswordHash = hasher.HashPassword(null, "Admin123!@#"),
                     FullName = "Administrator",
                     NormalizedUserName = "admin",
                     Email = "admin@email.com",

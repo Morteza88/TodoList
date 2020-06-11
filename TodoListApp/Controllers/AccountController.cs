@@ -56,11 +56,6 @@ namespace TodoListApp.Controllers
                 FullName = userDto.FullName,
                 Email = userDto.Email
             };
-            //var resultaa = await _roleManager.CreateAsync(new Role
-            //{
-            //    Name = "Employee",
-            //    Description = "employee role"
-            //});
             var result = await _userManager.CreateAsync(user, userDto.Password);
             if (result != IdentityResult.Success)
             {
@@ -99,7 +94,8 @@ namespace TodoListApp.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Role, "Admin"),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
