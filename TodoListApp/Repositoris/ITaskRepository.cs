@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Repositoris
 {
-    public interface ITaskItemRepository
+    public interface ITaskRepository :IRepository<Models.Task>
     {
+        Task<Models.Task> GetByName(string firstName);
     }
 }
