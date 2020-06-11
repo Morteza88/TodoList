@@ -15,5 +15,6 @@ namespace TodoListApp.Models
         public string Priority { get; set; }
         public string Description { get; set; }
         public ICollection<SubTaskItem> SubTasks { get; set; }
+        public User User { get; set; }
     }
 }

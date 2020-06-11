@@ -18,5 +18,6 @@ namespace TodoListApp.Models
         [StringLength(100)]
         public string FullName { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<TaskItem> Tasks { get; set; }
     }
 }
