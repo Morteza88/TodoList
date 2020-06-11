@@ -63,14 +63,26 @@ namespace TodoListApp
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-                c.AddSecurityDefinition("Bearer",
-                    new OpenApiSecurityScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
-                        In = ParameterLocation.Header,
-                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.ApiKey
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                            },
+                            new List<string>()
+                        }
                     });
+
 
             });
         }
