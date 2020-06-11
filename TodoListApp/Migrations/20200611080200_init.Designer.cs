@@ -9,7 +9,7 @@ using TodoListApp.Data;
 
 namespace TodoListApp.Migrations
 {
-    [DbContext(typeof(TodoListContext))]
+    [DbContext(typeof(TodoListDBContext))]
     [Migration("20200611080200_init")]
     partial class init
     {

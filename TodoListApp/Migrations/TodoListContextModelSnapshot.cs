@@ -8,7 +8,7 @@ using TodoListApp.Data;
 
 namespace TodoListApp.Migrations
 {
-    [DbContext(typeof(TodoListContext))]
+    [DbContext(typeof(TodoListDBContext))]
     partial class TodoListContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -152,6 +152,24 @@ namespace TodoListApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "7a369c94-1480-48f3-bc06-0899bfb5b28e",
+                            Description = "Admin role",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConcurrencyStamp = "5708f445-e636-4553-bf7a-cb80ca4f5498",
+                            Description = "Employee role",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        });
                 });
 
             modelBuilder.Entity("TodoListApp.Models.SubTaskItem", b =>

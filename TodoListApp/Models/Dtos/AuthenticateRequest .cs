@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Models.Dtos
 {
-    public class TokenRequestDto
+    public class AuthenticateRequest
     {
         [Required]
         public string Username { get; set; }
