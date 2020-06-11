@@ -10,8 +10,8 @@ using TodoListApp.Data;
 namespace TodoListApp.Migrations
 {
     [DbContext(typeof(TodoListDBContext))]
-    [Migration("20200611194004_init2")]
-    partial class init2
+    [Migration("20200611202910_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace TodoListApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,8 +34,8 @@ namespace TodoListApp.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -44,7 +44,7 @@ namespace TodoListApp.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,8 +57,8 @@ namespace TodoListApp.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -67,7 +67,7 @@ namespace TodoListApp.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -78,8 +78,8 @@ namespace TodoListApp.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -88,13 +88,13 @@ namespace TodoListApp.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -105,15 +105,15 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 1,
-                            RoleId = 1
+                            UserId = new Guid("9455d69a-7b93-43e4-93ce-fe0befc364e9"),
+                            RoleId = new Guid("0f4360cc-30d9-444e-bc5a-d9087a9d2aea")
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -131,10 +131,9 @@ namespace TodoListApp.Migrations
 
             modelBuilder.Entity("TodoListApp.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -165,48 +164,52 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            ConcurrencyStamp = "f660ec82-8052-49b4-aece-eb9fc93d07e0",
+                            Id = new Guid("0f4360cc-30d9-444e-bc5a-d9087a9d2aea"),
+                            ConcurrencyStamp = "134fb73c-c8a6-4d0f-ba79-37e4cd106fed",
                             Description = "Admin role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = 2,
-                            ConcurrencyStamp = "d0dfe9f7-2fa6-4c76-bb28-f241ed81a009",
+                            Id = new Guid("d2bcbe4a-14ab-4f0b-a6f3-750eb231f1c1"),
+                            ConcurrencyStamp = "6167bac7-078b-40f0-a054-ed29a2046be8",
                             Description = "Employee role",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
                 });
 
-            modelBuilder.Entity("TodoListApp.Models.SubTaskItem", b =>
+            modelBuilder.Entity("TodoListApp.Models.SubTask", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentTaskID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TaskId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ParentTaskID");
+                    b.HasIndex("TaskId");
 
                     b.ToTable("SubTaskItems");
                 });
 
-            modelBuilder.Entity("TodoListApp.Models.TaskItem", b =>
+            modelBuilder.Entity("TodoListApp.Models.Task", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -220,10 +223,10 @@ namespace TodoListApp.Migrations
                     b.Property<string>("Priority")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -232,10 +235,9 @@ namespace TodoListApp.Migrations
 
             modelBuilder.Entity("TodoListApp.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -307,9 +309,9 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("9455d69a-7b93-43e4-93ce-fe0befc364e9"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f945fe96-65f3-4c4b-a5db-bf6d50651e11",
+                            ConcurrencyStamp = "8b7884d7-f84e-4127-92af-6ff9d260d17b",
                             Email = "admin@email.com",
                             EmailConfirmed = true,
                             FullName = "Administrator",
@@ -317,15 +319,15 @@ namespace TodoListApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@email.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIZRpwNuz6POkqvUjrhV4S/YtExlqz9JrTfd5bcSURZB2v9/ktRG8qf9nCaQHxIZdQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMiY5fcav0h2Y2i4bTnqFimJUhzB4HnPFtbgz7dhMNzSGURcmvJuU6uSm6xLQQ7ACA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "65cd4dde-ee8a-4e1d-a31d-e49f63ca63df",
+                            SecurityStamp = "ac3e6e01-81c5-4a9c-ad42-1138a230e589",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("TodoListApp.Models.Role", null)
                         .WithMany()
@@ -334,7 +336,7 @@ namespace TodoListApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("TodoListApp.Models.User", null)
                         .WithMany()
@@ -343,7 +345,7 @@ namespace TodoListApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("TodoListApp.Models.User", null)
                         .WithMany()
@@ -352,7 +354,7 @@ namespace TodoListApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
                     b.HasOne("TodoListApp.Models.Role", null)
                         .WithMany()
@@ -367,7 +369,7 @@ namespace TodoListApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("TodoListApp.Models.User", null)
                         .WithMany()
@@ -376,14 +378,14 @@ namespace TodoListApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TodoListApp.Models.SubTaskItem", b =>
+            modelBuilder.Entity("TodoListApp.Models.SubTask", b =>
                 {
-                    b.HasOne("TodoListApp.Models.TaskItem", "ParentTask")
+                    b.HasOne("TodoListApp.Models.Task", "Task")
                         .WithMany("SubTasks")
-                        .HasForeignKey("ParentTaskID");
+                        .HasForeignKey("TaskId");
                 });
 
-            modelBuilder.Entity("TodoListApp.Models.TaskItem", b =>
+            modelBuilder.Entity("TodoListApp.Models.Task", b =>
                 {
                     b.HasOne("TodoListApp.Models.User", "User")
                         .WithMany("Tasks")

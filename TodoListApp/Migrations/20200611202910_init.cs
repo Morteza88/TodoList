@@ -11,8 +11,7 @@ namespace TodoListApp.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
@@ -27,8 +26,7 @@ namespace TodoListApp.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -52,28 +50,12 @@ namespace TodoListApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaskItems",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    DueDate = table.Column<DateTime>(nullable: false),
-                    Priority = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TaskItems", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -94,7 +76,7 @@ namespace TodoListApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -116,7 +98,7 @@ namespace TodoListApp.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,8 +115,8 @@ namespace TodoListApp.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -157,7 +139,7 @@ namespace TodoListApp.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
@@ -174,44 +156,67 @@ namespace TodoListApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubTaskItems",
+                name: "TaskItems",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    ParentTaskID = table.Column<int>(nullable: true)
+                    DueDate = table.Column<DateTime>(nullable: false),
+                    Priority = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubTaskItems", x => x.ID);
+                    table.PrimaryKey("PK_TaskItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SubTaskItems_TaskItems_ParentTaskID",
-                        column: x => x.ParentTaskID,
+                        name: "FK_TaskItems_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubTaskItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    TaskId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubTaskItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubTaskItems_TaskItems_TaskId",
+                        column: x => x.TaskId,
                         principalTable: "TaskItems",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { 1, "018366ef-9dcc-4f6e-9f12-ed3a2b5d38e0", "Admin role", "Admin", "ADMIN" });
+                values: new object[] { new Guid("0f4360cc-30d9-444e-bc5a-d9087a9d2aea"), "134fb73c-c8a6-4d0f-ba79-37e4cd106fed", "Admin role", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { 2, "49ede7ce-053a-4b1d-8da3-927f79f25c92", "Employee role", "Employee", "EMPLOYEE" });
+                values: new object[] { new Guid("d2bcbe4a-14ab-4f0b-a6f3-750eb231f1c1"), "6167bac7-078b-40f0-a054-ed29a2046be8", "Employee role", "Employee", "EMPLOYEE" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "IsActive", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "ba1b2f39-327c-4a95-b576-5b91d21f8fd0", "admin@email.com", true, "Administrator", true, false, null, "admin@email.com", "admin", "AQAAAAEAACcQAAAAECPkaHj0qvY5OoxKMQWwmq3Oas8Epa1GCHSg2zQpJJzv5TbMyYb4w7opAYBRsWAISA==", null, false, "0e38e080-969a-43cc-ad8c-c65647acf69f", false, "Admin" });
+                values: new object[] { new Guid("9455d69a-7b93-43e4-93ce-fe0befc364e9"), 0, "8b7884d7-f84e-4127-92af-6ff9d260d17b", "admin@email.com", true, "Administrator", true, false, null, "admin@email.com", "admin", "AQAAAAEAACcQAAAAEMiY5fcav0h2Y2i4bTnqFimJUhzB4HnPFtbgz7dhMNzSGURcmvJuU6uSm6xLQQ7ACA==", null, false, "ac3e6e01-81c5-4a9c-ad42-1138a230e589", false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[] { 1, 1 });
+                values: new object[] { new Guid("9455d69a-7b93-43e4-93ce-fe0befc364e9"), new Guid("0f4360cc-30d9-444e-bc5a-d9087a9d2aea") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -253,9 +258,14 @@ namespace TodoListApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubTaskItems_ParentTaskID",
+                name: "IX_SubTaskItems_TaskId",
                 table: "SubTaskItems",
-                column: "ParentTaskID");
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskItems_UserId",
+                table: "TaskItems",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -282,10 +292,10 @@ namespace TodoListApp.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "TaskItems");
 
             migrationBuilder.DropTable(
-                name: "TaskItems");
+                name: "AspNetUsers");
         }
     }
 }

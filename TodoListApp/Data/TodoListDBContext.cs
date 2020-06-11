@@ -41,7 +41,7 @@ namespace TodoListApp.Data
             builder.Entity<User>().HasData(
                 new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = adminUserGuid,
                     UserName = "Admin",
                     PasswordHash = hasher.HashPassword(null, "Admin123!@#"),
                     FullName = "Administrator",
