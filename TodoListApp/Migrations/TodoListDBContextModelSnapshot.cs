@@ -9,7 +9,7 @@ using TodoListApp.Data;
 namespace TodoListApp.Migrations
 {
     [DbContext(typeof(TodoListDBContext))]
-    partial class TodoListContextModelSnapshot : ModelSnapshot
+    partial class TodoListDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -99,6 +99,13 @@ namespace TodoListApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -157,7 +164,7 @@ namespace TodoListApp.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7a369c94-1480-48f3-bc06-0899bfb5b28e",
+                            ConcurrencyStamp = "c21a64d4-2651-4416-8ffb-04d51f845210",
                             Description = "Admin role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -165,7 +172,7 @@ namespace TodoListApp.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5708f445-e636-4553-bf7a-cb80ca4f5498",
+                            ConcurrencyStamp = "7c6d07a4-238f-4eb0-924d-083b6f60e48d",
                             Description = "Employee role",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
@@ -289,6 +296,25 @@ namespace TodoListApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "9bbd4784-01c3-43f4-ad91-57c03d7cb6b8",
+                            Email = "admin@email.com",
+                            EmailConfirmed = true,
+                            FullName = "Administrator",
+                            IsActive = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "admin@email.com",
+                            NormalizedUserName = "admin",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a5c44284-ae95-4e3c-8a6f-15a45e95d79c",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
