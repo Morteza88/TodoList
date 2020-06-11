@@ -9,7 +9,7 @@ using TodoListApp.Models;
 
 namespace TodoListApp.Data
 {
-    public class TodoListDBContext : IdentityDbContext<User, Role, int>
+    public class TodoListDBContext : IdentityDbContext<User, Role, Guid>
     {
         public TodoListDBContext(DbContextOptions<TodoListDBContext> options)
             : base(options)
@@ -18,17 +18,20 @@ namespace TodoListApp.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            var adminRoleGuid = Guid.NewGuid();
+            var employeeRoleGuid = Guid.NewGuid();
+            var adminUserGuid = Guid.NewGuid();
             builder.Entity<Role>().HasData(
                 new Role
                 {
-                    Id = 1,
+                    Id = adminRoleGuid,
                     Name = "Admin",
                     Description = "Admin role",
                     NormalizedName = "ADMIN"
                 },
                 new Role
                 {
-                    Id = 2,
+                    Id = employeeRoleGuid,
                     Name = "Employee",
                     Description = "Employee role",
                     NormalizedName = "EMPLOYEE"
@@ -38,7 +41,7 @@ namespace TodoListApp.Data
             builder.Entity<User>().HasData(
                 new User
                 {
-                    Id = 1,
+                    Id = Guid.NewGuid(),
                     UserName = "Admin",
                     PasswordHash = hasher.HashPassword(null, "Admin123!@#"),
                     FullName = "Administrator",
@@ -50,15 +53,15 @@ namespace TodoListApp.Data
                     SecurityStamp = Guid.NewGuid().ToString()
                 }
             );
-            builder.Entity<IdentityUserRole<int>> ().HasData(
-                new IdentityUserRole<int>
+            builder.Entity<IdentityUserRole<Guid>> ().HasData(
+                new IdentityUserRole<Guid>
                 {
-                    UserId = 1,
-                    RoleId = 1,
+                    UserId = adminUserGuid,
+                    RoleId = adminRoleGuid,
                 }
             );
         }
-        public DbSet<TaskItem> TaskItems { get; set; }
-        public DbSet<SubTaskItem> SubTaskItems { get; set; }
+        public DbSet<Models.Task> TaskItems { get; set; }
+        public DbSet<SubTask> SubTaskItems { get; set; }
     }
 }

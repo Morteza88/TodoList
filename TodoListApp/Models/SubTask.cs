@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Models
 {
-    public class SubTaskItem
+    public class SubTask: BaseEntity
     {
-        [Key]
-        public int ID { get; set; }
         public string Name { get; set; }
-        public TaskItem ParentTask { get; set; }
+        public Task Task { get; set; }
     }
 }

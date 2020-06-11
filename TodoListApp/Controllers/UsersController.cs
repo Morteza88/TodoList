@@ -35,9 +35,10 @@ namespace TodoListApp.Controllers
             return await _userManager.Users.ToListAsync();
         }
 
+        // GET: api/Users/5
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
@@ -49,7 +50,7 @@ namespace TodoListApp.Controllers
 
         [HttpGet("[action]")]
         [Authorize(Roles = "Employee")]
-        public async Task<ActionResult<User>> GetMyUser(int id)
+        public async Task<ActionResult<User>> GetMyUser(Guid id)
         {
             var claims = _httpContextAccessor.HttpContext.User.Claims.ToList();
             string userName = null;
@@ -70,7 +71,7 @@ namespace TodoListApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, UserDto userDto)
+        public async Task<IActionResult> PutUser(Guid id, UserDto userDto)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
@@ -116,7 +117,7 @@ namespace TodoListApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        public async Task<ActionResult<User>> DeleteUser(Guid id)
         {
             // Look for user in the UserStore
             var user = _userManager.Users.SingleOrDefault(u => u.Id == id);
@@ -148,7 +149,7 @@ namespace TodoListApp.Controllers
             return Ok(user);
         }
 
-        private bool UserExists(int id)
+        private bool UserExists(Guid id)
         {
             return _userManager.Users.Any(u => u.Id == id);
         }

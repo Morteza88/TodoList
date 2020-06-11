@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Models
 {
-    public class Role : IdentityRole<int>
+    public class Role : IdentityRole<Guid>
     {
         [Required]
         [StringLength(200)]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Models
 {
-    public class User : IdentityUser<int>
+    public class User : IdentityUser<Guid>
     {
         public User()
         {
@@ -18,6 +18,6 @@ namespace TodoListApp.Models
         [StringLength(100)]
         public string FullName { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<TaskItem> Tasks { get; set; }
+        public ICollection<Task> Tasks { get; set; }
     }
 }
