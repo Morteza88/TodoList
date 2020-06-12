@@ -22,25 +22,26 @@ namespace TodoListApp.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
-        private IConfiguration _config;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public UsersController(UserManager<User> userManager, IUserService userService, IConfiguration config, ILogger<WeatherForecastController> logger)
+        public UsersController(IUserService userService, ILogger<WeatherForecastController> logger)
         {
-            _userManager = userManager;
             _userService = userService;
-            _config = config;
             _logger = logger;
         }
 
         // GET: api/Users
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<User>> GetUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _userService.GetUsersAsync();
+            var users = await _userService.GetUsersAsync();
+            if (users == null)
+            {
+                return BadRequest();
+            }
+            return Ok(users);
         }
 
         // POST: api/Users/CreateUser
@@ -60,34 +61,12 @@ namespace TodoListApp.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Authenticate(AuthenticateRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
-            if (user == null)
-                return BadRequest("Invalid Username or Password");
-
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-            if (!isPasswordValid)
-                return BadRequest("Invalid Username or Password");
-
-            var jwtToken = generateJwtToken(user);
-            return Ok(jwtToken);
-        }
-
-        private string generateJwtToken(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var jwtToken = await _userService.AuthenticateAsync(request);
+            if (jwtToken==null)
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, "Admin"),
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                return BadRequest();
+            }
+            return Ok(jwtToken);
         }
     }
 }

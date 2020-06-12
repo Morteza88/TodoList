@@ -28,18 +28,8 @@ namespace TodoListApp.Repositoris
         public async Task<int> InsertAsync(T entity)
         {
             if (entity == null) throw new ArgumentNullException("entity");
-            try
-            {
-
-                await entities.AddAsync(entity);
-                return await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-
-                throw new Exception(e.Message);
-            }
-            return 1;
+            await entities.AddAsync(entity);
+            return await context.SaveChangesAsync();
         }
         public async Task<int> UpdateAsync(T entity)
         {

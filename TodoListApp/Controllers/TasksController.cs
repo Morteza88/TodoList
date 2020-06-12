@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,48 +27,68 @@ namespace TodoListApp.Controllers
 
         // GET: api/Tasks/GetAllTasks
         [HttpGet("[action]")]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<Models.Task>> GetAllTasks()
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasks()
         {
-            return await _taskService.GetAllTasksAsync();
+            var tasks = await _taskService.GetAllTasksAsync();
+            var taskDtos = MapTasksToTaskDtos(tasks);
+            return Ok(taskDtos);
+        }
+
+        // GET: api/Tasks/GetAllTasksWithDetails
+        [HttpGet("[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasksWithDetails()
+        {
+            var tasks = await _taskService.GetAllTasksWithDetailsAsync();
+            var taskDtos = MapTasksToTaskDtos(tasks);
+            return Ok(taskDtos);
         }
 
         // POST: api/Tasks/CreateTask
         [HttpPost("[action]")]
-        //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateTask(CreateTaskDto createTaskDto)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Models.Task>> CreateTask(CreateTaskDto createTaskDto)
         {
             var task =  await _taskService.CreateTaskAsync(createTaskDto);
             if (task == null)
             {
                 return BadRequest();
             }
-            return Ok();
+            return Ok(task);
         }
 
         // GET: api/Tasks/GetMyTasks
         [HttpGet("[action]")]
-        //[Authorize(Roles = "Employee")]
-        public async Task<ActionResult<List<TaskDto>>> GetMyTasks()
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetMyTasks()
         {
             var tasks = await _taskService.GetCurrentUserTasksAsync();
             if (tasks == null)
             {
                 return BadRequest();
             }
+            var taskDtos = MapTasksToTaskDtos(tasks);
+            return Ok(taskDtos);
+        }
+        private IEnumerable<TaskDto> MapTasksToTaskDtos(IEnumerable<Models.Task> tasks)
+        {
             var taskDtos = new List<TaskDto>();
             foreach (var task in tasks)
             {
                 var taskDto = new TaskDto
                 {
                     TaskId = task.Id,
-                    UserId = task.User.Id,
                     Name = task.Name,
                     DueDate = task.DueDate,
                     Priority = task.Priority,
                     Description = task.Description,
                     SubTasks = new List<SubTaskDto>(),
                 };
+                if (task.User!=null)
+                {
+                    taskDto.UserId = task.User.Id;
+                }
                 if (task.SubTasks != null)
                 {
                     foreach (var subTask in task.SubTasks)
@@ -82,21 +103,26 @@ namespace TodoListApp.Controllers
                 }
                 taskDtos.Add(taskDto);
             }
-            return Ok(taskDtos);
+            return taskDtos;
         }
 
-        // POST: api/Tasks/AddDiscriptionToTask
+        // POST: api/Tasks/AddSubTaskToTask
         [HttpPost("[action]")]
-        //[Authorize(Roles = "Employee")]
-        public async Task<SubTaskDto> AddSubTaskToTask(SubTaskDto subTaskDto)
+        [Authorize]
+        public async Task<ActionResult<SubTaskDto>> AddSubTaskToTask(SubTaskDto subTaskDto)
         {
             var subTask = await _taskService.AddSubTaskToTaskAsync(subTaskDto);
-            return new SubTaskDto
+            if (subTask == null)
+            {
+                return BadRequest();
+            }
+            var subTaskDtoOut = new SubTaskDto
             {
                 Name = subTask.Name,
                 Description = subTask.Description,
                 TaskId = subTask.Task.Id,
             };
+            return Ok(subTaskDtoOut);
         }
     }
 }

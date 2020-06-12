@@ -49,6 +49,10 @@ namespace TodoListApp.Services
         {
             return await _taskRepository.GetAllAsync();
         }
+        public async Task<IEnumerable<Models.Task>> GetAllTasksWithDetailsAsync()
+        {
+            return await _taskRepository.GetAllWithDetailsAsync();
+        }
         public async Task<IEnumerable<Models.Task>> GetCurrentUserTasksAsync()
         {
             var user = await _userService.GetCurrentUserAsync();
@@ -57,10 +61,10 @@ namespace TodoListApp.Services
                 throw new ArgumentNullException("user");
             }
             var tasks= await _taskRepository.GetTasksByUserAsync(user);
-            foreach (var task in tasks)
-            {
-                task.SubTasks = await _subTaskRepository.GetSubTasksByTaskAsync(task);
-            }
+            //foreach (var task in tasks)
+            //{
+            //    task.SubTasks = await _subTaskRepository.GetSubTasksByTaskAsync(task);
+            //}
             return tasks;
         }
         public async Task<SubTask> AddSubTaskToTaskAsync(SubTaskDto subTaskDto)

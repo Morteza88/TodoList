@@ -12,6 +12,7 @@ namespace TodoListApp.Services
     {
         Task<Models.Task> CreateTaskAsync(CreateTaskDto createTaskDto);
         Task<IEnumerable<Models.Task>> GetAllTasksAsync();
+        Task<IEnumerable<Models.Task>> GetAllTasksWithDetailsAsync();
         Task<IEnumerable<Models.Task>> GetCurrentUserTasksAsync();
         Task<SubTask> AddSubTaskToTaskAsync(SubTaskDto subTaskDto);
     }

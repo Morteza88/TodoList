@@ -9,5 +9,6 @@ namespace TodoListApp.Repositoris
     public interface ITaskRepository :IRepository<Models.Task>
     {
         Task<IEnumerable<Models.Task>> GetTasksByUserAsync(User user);
+        Task<IEnumerable<Models.Task>> GetAllWithDetailsAsync();
     }
 }
