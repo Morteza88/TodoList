@@ -161,11 +161,11 @@ namespace TodoListApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     DueDate = table.Column<DateTime>(nullable: false),
                     Priority = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,7 +175,7 @@ namespace TodoListApp.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,8 +184,9 @@ namespace TodoListApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    TaskId = table.Column<Guid>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    TaskId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -195,28 +196,28 @@ namespace TodoListApp.Migrations
                         column: x => x.TaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { new Guid("f905efe6-0729-4ed2-acd6-fe16f2cba026"), "e2c24578-b010-46d2-8908-c1d0a8608734", "Admin role", "Admin", "ADMIN" });
+                values: new object[] { new Guid("44c4c6d6-40a7-447b-813a-8d1580dfc56e"), "2906b150-8aef-4863-a9ac-f4d3cbc9df83", "Admin role", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { new Guid("49b11636-b6a2-47b5-8e75-0293e9ca8bfd"), "ca073e5f-7e20-4726-a220-3243f2debd95", "Employee role", "Employee", "EMPLOYEE" });
+                values: new object[] { new Guid("34a26bae-4dd9-43bb-9be5-fd2bbe7f08d0"), "47770153-5b2b-482e-aa63-951bf7c12add", "Employee role", "Employee", "EMPLOYEE" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "IsActive", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("b48778d0-4312-43ca-8890-260e68479302"), 0, "51e8414a-6944-4903-b9db-5734d03d830e", "admin@email.com", true, "Administrator", true, false, null, "admin@email.com", "admin", "AQAAAAEAACcQAAAAEGgAix0Xh+0dkz+Mnl3Fj5Uvk4vDBDh3x7JKIDYBxPki1vRGihl5ORzuBG/i358UAQ==", null, false, "79487acb-4abb-461d-a96c-4b0c3ef4e871", false, "Admin" });
+                values: new object[] { new Guid("721a9e49-a358-43bf-81b2-5a58035ca04c"), 0, "dbce7b4c-1ca5-448a-8994-937017a791a3", "admin@email.com", true, "Administrator", true, false, null, "admin@email.com", "admin", "AQAAAAEAACcQAAAAEC5m9KiluGAD7+iydh4FjMgbvvBc8EWT5oz7cwwRtn9LW5N8B/muvBvF7DORtFUWXQ==", null, false, "5b51e40b-dc10-4930-8482-591d50c09635", false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[] { new Guid("b48778d0-4312-43ca-8890-260e68479302"), new Guid("f905efe6-0729-4ed2-acd6-fe16f2cba026") });
+                values: new object[] { new Guid("721a9e49-a358-43bf-81b2-5a58035ca04c"), new Guid("44c4c6d6-40a7-447b-813a-8d1580dfc56e") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

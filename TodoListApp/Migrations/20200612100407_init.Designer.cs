@@ -10,7 +10,7 @@ using TodoListApp.Data;
 namespace TodoListApp.Migrations
 {
     [DbContext(typeof(TodoListDBContext))]
-    [Migration("20200612063017_init")]
+    [Migration("20200612100407_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,8 +105,8 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b48778d0-4312-43ca-8890-260e68479302"),
-                            RoleId = new Guid("f905efe6-0729-4ed2-acd6-fe16f2cba026")
+                            UserId = new Guid("721a9e49-a358-43bf-81b2-5a58035ca04c"),
+                            RoleId = new Guid("44c4c6d6-40a7-447b-813a-8d1580dfc56e")
                         });
                 });
 
@@ -164,16 +164,16 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f905efe6-0729-4ed2-acd6-fe16f2cba026"),
-                            ConcurrencyStamp = "e2c24578-b010-46d2-8908-c1d0a8608734",
+                            Id = new Guid("44c4c6d6-40a7-447b-813a-8d1580dfc56e"),
+                            ConcurrencyStamp = "2906b150-8aef-4863-a9ac-f4d3cbc9df83",
                             Description = "Admin role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("49b11636-b6a2-47b5-8e75-0293e9ca8bfd"),
-                            ConcurrencyStamp = "ca073e5f-7e20-4726-a220-3243f2debd95",
+                            Id = new Guid("34a26bae-4dd9-43bb-9be5-fd2bbe7f08d0"),
+                            ConcurrencyStamp = "47770153-5b2b-482e-aa63-951bf7c12add",
                             Description = "Employee role",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
@@ -189,10 +189,14 @@ namespace TodoListApp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TaskId")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -218,12 +222,13 @@ namespace TodoListApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Priority")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -309,9 +314,9 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b48778d0-4312-43ca-8890-260e68479302"),
+                            Id = new Guid("721a9e49-a358-43bf-81b2-5a58035ca04c"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "51e8414a-6944-4903-b9db-5734d03d830e",
+                            ConcurrencyStamp = "dbce7b4c-1ca5-448a-8994-937017a791a3",
                             Email = "admin@email.com",
                             EmailConfirmed = true,
                             FullName = "Administrator",
@@ -319,9 +324,9 @@ namespace TodoListApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@email.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGgAix0Xh+0dkz+Mnl3Fj5Uvk4vDBDh3x7JKIDYBxPki1vRGihl5ORzuBG/i358UAQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC5m9KiluGAD7+iydh4FjMgbvvBc8EWT5oz7cwwRtn9LW5N8B/muvBvF7DORtFUWXQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "79487acb-4abb-461d-a96c-4b0c3ef4e871",
+                            SecurityStamp = "5b51e40b-dc10-4930-8482-591d50c09635",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -382,14 +387,18 @@ namespace TodoListApp.Migrations
                 {
                     b.HasOne("TodoListApp.Models.Task", "Task")
                         .WithMany("SubTasks")
-                        .HasForeignKey("TaskId");
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TodoListApp.Models.Task", b =>
                 {
                     b.HasOne("TodoListApp.Models.User", "User")
                         .WithMany("Tasks")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

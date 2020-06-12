@@ -9,6 +9,8 @@ namespace TodoListApp.Models.Dtos
     public class TaskDto
     {
         [Required]
+        public Guid TaskId { get; set; }
+        [Required]
         public Guid UserId { get; set; }
 
         [Required]

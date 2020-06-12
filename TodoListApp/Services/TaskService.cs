@@ -56,7 +56,12 @@ namespace TodoListApp.Services
             {
                 throw new ArgumentNullException("user");
             }
-            return await _taskRepository.GetTasksByUserAsync(user);
+            var tasks= await _taskRepository.GetTasksByUserAsync(user);
+            foreach (var task in tasks)
+            {
+                task.SubTasks = await _subTaskRepository.GetSubTasksByTaskAsync(task);
+            }
+            return tasks;
         }
         public async Task<SubTask> AddSubTaskToTaskAsync(SubTaskDto subTaskDto)
         {

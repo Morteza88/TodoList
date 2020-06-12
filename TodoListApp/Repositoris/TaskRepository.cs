@@ -14,7 +14,7 @@ namespace TodoListApp.Repositoris
 
         public async Task<IEnumerable<Models.Task>> GetTasksByUserAsync(User user)
         {
-            return await entities.ToListAsync();
+            return await entities.Where(task => task.User == user).ToListAsync();
         }
     }
 }

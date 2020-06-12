@@ -60,11 +60,12 @@ namespace TodoListApp.Controllers
             {
                 var taskDto = new TaskDto
                 {
+                    TaskId = task.Id,
+                    UserId = task.User.Id,
                     Name = task.Name,
                     DueDate = task.DueDate,
                     Priority = task.Priority,
                     Description = task.Description,
-                    UserId = task.User.Id,
                     SubTasks = new List<SubTaskDto>(),
                 };
                 if (task.SubTasks != null)
@@ -87,9 +88,15 @@ namespace TodoListApp.Controllers
         // POST: api/Tasks/AddDiscriptionToTask
         [HttpPost("[action]")]
         //[Authorize(Roles = "Employee")]
-        public async Task<SubTask> AddSubTaskToTask(SubTaskDto subTaskDto)
+        public async Task<SubTaskDto> AddSubTaskToTask(SubTaskDto subTaskDto)
         {
-            return await _taskService.AddSubTaskToTaskAsync(subTaskDto);
+            var subTask = await _taskService.AddSubTaskToTaskAsync(subTaskDto);
+            return new SubTaskDto
+            {
+                Name = subTask.Name,
+                Description = subTask.Description,
+                TaskId = subTask.Task.Id,
+            };
         }
     }
 }
