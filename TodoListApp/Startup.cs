@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TodoListApp.Data;
 using TodoListApp.Models;
+using TodoListApp.Repositoris;
+using TodoListApp.Services;
 
 namespace TodoListApp
 {
@@ -59,6 +61,10 @@ namespace TodoListApp
             });
 
             services.AddControllers();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(ITaskRepository), typeof(TaskRepository));
+            services.AddScoped(typeof(ITaskService), typeof(TaskService));
+            services.AddScoped(typeof(IAccountService), typeof(AccountService));
 
             services.AddSwaggerGen(c =>
             {

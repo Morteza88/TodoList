@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TodoListApp.Data;
+using TodoListApp.Models;
 
 namespace TodoListApp.Repositoris
 {
@@ -11,9 +12,9 @@ namespace TodoListApp.Repositoris
     {
         public TaskRepository(TodoListDBContext context) : base(context) { }
 
-        public Task<Models.Task> GetByName(string name)
+        public Task<Models.Task> GetByUser(User user)
         {
-            return context.Set<Models.Task>().FirstOrDefaultAsync(author => author.Name == name);
+            return context.Set<Models.Task>().FirstOrDefaultAsync(tast => tast.User == user);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Models.DTOs
 {
-    public class UserDto
+    public class CreateUserDto
     {
         [Required]
         [StringLength(100)]

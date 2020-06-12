@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using TodoListApp.Models;
 using TodoListApp.Models.Dtos;
 using TodoListApp.Models.DTOs;
+using TodoListApp.Services;
 
 namespace TodoListApp.Controllers
 {
@@ -22,20 +23,20 @@ namespace TodoListApp.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly IAccountService _accountService;
         private IConfiguration _config;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public AccountController(UserManager<User> userManager, RoleManager<Role> roleManager, IConfiguration config, ILogger<WeatherForecastController> logger)
+        public AccountController(UserManager<User> userManager, IAccountService accountService, IConfiguration config, ILogger<WeatherForecastController> logger)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
+            _accountService = accountService;
             _config = config;
             _logger = logger;
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
@@ -48,24 +49,18 @@ namespace TodoListApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Create(UserDto userDto)
+        public async Task<ActionResult<User>> Create(CreateUserDto createUserDto)
         {
-            var user = new User
-            {
-                UserName = userDto.UserName,
-                FullName = userDto.FullName,
-                Email = userDto.Email
-            };
-            var result = await _userManager.CreateAsync(user, userDto.Password);
-            if (result != IdentityResult.Success)
-            {
-                return BadRequest(result.Errors);
-            }
-            var result2 = await _userManager.AddToRoleAsync(user, "Employee");
-            if (result2 != IdentityResult.Success)
-            {
-                return BadRequest(result2.Errors);
-            }
+            var user = await _accountService.CreateAccountAsync(createUserDto);
+            //if (user != IdentityResult.Success)
+            //{
+            //    return BadRequest(result.Errors);
+            //}
+            //var result2 = await _userManager.AddToRoleAsync(user, "Employee");
+            //if (result2 != IdentityResult.Success)
+            //{
+            //    return BadRequest(result2.Errors);
+            //}
             return Ok(user);
         }
 
