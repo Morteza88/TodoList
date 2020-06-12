@@ -8,6 +8,6 @@ namespace TodoListApp.Repositoris
 {
     public interface ITaskRepository :IRepository<Models.Task>
     {
-        Task<List<Models.Task>> GetTasksByUserAsync(User user);
+        Task<IEnumerable<Models.Task>> GetTasksByUserAsync(User user);
     }
 }

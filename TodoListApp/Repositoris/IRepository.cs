@@ -8,11 +8,11 @@ namespace TodoListApp.Repositoris
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<T> GetById(Guid id);
-        Task<int> Insert(T entity);
-        Task<int> Update(T entity);
-        Task<int> Delete(Guid id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(Guid id);
+        Task<int> InsertAsync(T entity);
+        Task<int> UpdateAsync(T entity);
+        Task<int> DeleteAsync(Guid id);
     }
 }
 

@@ -43,8 +43,8 @@ namespace TodoListApp.Controllers
             return await _userService.GetUsersAsync();
         }
 
-        // POST: api/Users
-        [HttpPost]
+        // POST: api/Users/CreateUser
+        [HttpPost("[action]")]
         public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
         {
             var user = await _userService.CreateAccountAsync(createUserDto);

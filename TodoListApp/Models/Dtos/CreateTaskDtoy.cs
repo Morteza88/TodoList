@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TodoListApp.Models.Dtos
 {
-    public class TaskDto
+    public class CreateTaskDto
     {
         [Required]
         public Guid UserId { get; set; }
@@ -16,7 +16,5 @@ namespace TodoListApp.Models.Dtos
         public DateTime DueDate { get; set; }
         public string Priority { get; set; }
         public string Description { get; set; }
-
-        public List<SubTaskDto> SubTasks { get; set; }
     }
 }

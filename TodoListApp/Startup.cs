@@ -63,6 +63,7 @@ namespace TodoListApp
             services.AddControllers();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(ITaskRepository), typeof(TaskRepository));
+            services.AddScoped(typeof(ISubTaskRepository), typeof(SubTaskRepository));
             services.AddScoped(typeof(ITaskService), typeof(TaskService));
             services.AddScoped(typeof(IUserService), typeof(UserService));
 

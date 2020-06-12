@@ -24,33 +24,72 @@ namespace TodoListApp.Controllers
             _taskService = taskService;
         }
 
-        // GET: api/Tasks
-        [HttpGet]
+        // GET: api/Tasks/GetAllTasks
+        [HttpGet("[action]")]
         //[Authorize(Roles = "Admin")]
         public async Task<IEnumerable<Models.Task>> GetAllTasks()
         {
             return await _taskService.GetAllTasksAsync();
         }
 
-        // GET: api/Tasks/GetMyTasks
-        [HttpGet("[action]")]
-        //[Authorize(Roles = "Employee")]
-        public async Task<IEnumerable<Models.Task>> GetMyTasks()
-        {
-            return await _taskService.GetCurrentUserTasksAsync();
-        }
-
-        // GET: api/Tasks
-        [HttpPost]
+        // POST: api/Tasks/CreateTask
+        [HttpPost("[action]")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateTask(TaskDto taskDto)
+        public async Task<ActionResult> CreateTask(CreateTaskDto createTaskDto)
         {
-            var task =  await _taskService.CreateTaskAsync(taskDto);
+            var task =  await _taskService.CreateTaskAsync(createTaskDto);
             if (task == null)
             {
                 return BadRequest();
             }
             return Ok();
+        }
+
+        // GET: api/Tasks/GetMyTasks
+        [HttpGet("[action]")]
+        //[Authorize(Roles = "Employee")]
+        public async Task<ActionResult<List<TaskDto>>> GetMyTasks()
+        {
+            var tasks = await _taskService.GetCurrentUserTasksAsync();
+            if (tasks == null)
+            {
+                return BadRequest();
+            }
+            var taskDtos = new List<TaskDto>();
+            foreach (var task in tasks)
+            {
+                var taskDto = new TaskDto
+                {
+                    Name = task.Name,
+                    DueDate = task.DueDate,
+                    Priority = task.Priority,
+                    Description = task.Description,
+                    UserId = task.User.Id,
+                    SubTasks = new List<SubTaskDto>(),
+                };
+                if (task.SubTasks != null)
+                {
+                    foreach (var subTask in task.SubTasks)
+                    {
+                        taskDto.SubTasks.Add(new SubTaskDto
+                        {
+                            Name = subTask.Name,
+                            Description = subTask.Description,
+                            TaskId = task.Id,
+                        });
+                    }
+                }
+                taskDtos.Add(taskDto);
+            }
+            return Ok(taskDtos);
+        }
+
+        // POST: api/Tasks/AddDiscriptionToTask
+        [HttpPost("[action]")]
+        //[Authorize(Roles = "Employee")]
+        public async Task<SubTask> AddSubTaskToTask(SubTaskDto subTaskDto)
+        {
+            return await _taskService.AddSubTaskToTaskAsync(subTaskDto);
         }
     }
 }
