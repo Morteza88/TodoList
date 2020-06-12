@@ -60,7 +60,7 @@ namespace TodoListApp.Controllers
 
         // GET: api/Tasks/GetMyTasks
         [HttpGet("[action]")]
-        [Authorize]
+        [Authorize(Roles = "Employee")]
         public async Task<ActionResult<IEnumerable<TaskDto>>> GetMyTasks()
         {
             var tasks = await _taskService.GetCurrentUserTasksAsync();
@@ -108,7 +108,7 @@ namespace TodoListApp.Controllers
 
         // POST: api/Tasks/AddSubTaskToTask
         [HttpPost("[action]")]
-        [Authorize]
+        [Authorize(Roles = "Employee")]
         public async Task<ActionResult<SubTaskDto>> AddSubTaskToTask(SubTaskDto subTaskDto)
         {
             var subTask = await _taskService.AddSubTaskToTaskAsync(subTaskDto);
