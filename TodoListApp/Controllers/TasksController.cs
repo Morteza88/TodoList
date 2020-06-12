@@ -48,14 +48,14 @@ namespace TodoListApp.Controllers
         // POST: api/Tasks/CreateTask
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Models.Task>> CreateTask(CreateTaskDto createTaskDto)
+        public async Task<ActionResult<TaskDto>> CreateTask(CreateTaskDto createTaskDto)
         {
             var task =  await _taskService.CreateTaskAsync(createTaskDto);
             if (task == null)
             {
                 return BadRequest();
             }
-            return Ok(task);
+            return Ok(MapTaskToTaskDto(task));
         }
 
         // GET: api/Tasks/GetMyTasks
@@ -76,34 +76,38 @@ namespace TodoListApp.Controllers
             var taskDtos = new List<TaskDto>();
             foreach (var task in tasks)
             {
-                var taskDto = new TaskDto
-                {
-                    TaskId = task.Id,
-                    Name = task.Name,
-                    DueDate = task.DueDate,
-                    Priority = task.Priority,
-                    Description = task.Description,
-                    SubTasks = new List<SubTaskDto>(),
-                };
-                if (task.User!=null)
-                {
-                    taskDto.UserId = task.User.Id;
-                }
-                if (task.SubTasks != null)
-                {
-                    foreach (var subTask in task.SubTasks)
-                    {
-                        taskDto.SubTasks.Add(new SubTaskDto
-                        {
-                            Name = subTask.Name,
-                            Description = subTask.Description,
-                            TaskId = task.Id,
-                        });
-                    }
-                }
-                taskDtos.Add(taskDto);
+                taskDtos.Add(MapTaskToTaskDto(task));
             }
             return taskDtos;
+        }
+        private TaskDto MapTaskToTaskDto(Models.Task task)
+        {
+            var taskDto = new TaskDto
+            {
+                TaskId = task.Id,
+                Name = task.Name,
+                DueDate = task.DueDate,
+                Priority = task.Priority,
+                Description = task.Description,
+                SubTasks = new List<SubTaskDto>(),
+            };
+            if (task.User != null)
+            {
+                taskDto.UserId = task.User.Id;
+            }
+            if (task.SubTasks != null)
+            {
+                foreach (var subTask in task.SubTasks)
+                {
+                    taskDto.SubTasks.Add(new SubTaskDto
+                    {
+                        Name = subTask.Name,
+                        Description = subTask.Description,
+                        TaskId = task.Id,
+                    });
+                }
+            }
+            return taskDto;
         }
 
         // POST: api/Tasks/AddSubTaskToTask

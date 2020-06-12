@@ -23,12 +23,10 @@ namespace TodoListApp.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ILogger<WeatherForecastController> _logger;
 
-        public UsersController(IUserService userService, ILogger<WeatherForecastController> logger)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
-            _logger = logger;
         }
 
         // GET: api/Users

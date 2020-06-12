@@ -103,8 +103,8 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("721a9e49-a358-43bf-81b2-5a58035ca04c"),
-                            RoleId = new Guid("44c4c6d6-40a7-447b-813a-8d1580dfc56e")
+                            UserId = new Guid("96419f24-4eb2-4f57-b93b-b2ae6755dcc9"),
+                            RoleId = new Guid("bf448b6f-c1e4-4f6e-85ea-cd46f1199474")
                         });
                 });
 
@@ -162,16 +162,16 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("44c4c6d6-40a7-447b-813a-8d1580dfc56e"),
-                            ConcurrencyStamp = "2906b150-8aef-4863-a9ac-f4d3cbc9df83",
+                            Id = new Guid("bf448b6f-c1e4-4f6e-85ea-cd46f1199474"),
+                            ConcurrencyStamp = "a5afa419-0079-4e68-8c7e-a4f886c64b10",
                             Description = "Admin role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("34a26bae-4dd9-43bb-9be5-fd2bbe7f08d0"),
-                            ConcurrencyStamp = "47770153-5b2b-482e-aa63-951bf7c12add",
+                            Id = new Guid("05c7bb01-23b9-4167-998e-c69d0d5dd432"),
+                            ConcurrencyStamp = "67b839d2-3d6d-4d26-a641-1fe7ea4bec62",
                             Description = "Employee role",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
@@ -312,9 +312,9 @@ namespace TodoListApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("721a9e49-a358-43bf-81b2-5a58035ca04c"),
+                            Id = new Guid("96419f24-4eb2-4f57-b93b-b2ae6755dcc9"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dbce7b4c-1ca5-448a-8994-937017a791a3",
+                            ConcurrencyStamp = "355d4e7c-8a29-4bb7-abee-5591e5c74693",
                             Email = "admin@email.com",
                             EmailConfirmed = true,
                             FullName = "Administrator",
@@ -322,9 +322,9 @@ namespace TodoListApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@email.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEC5m9KiluGAD7+iydh4FjMgbvvBc8EWT5oz7cwwRtn9LW5N8B/muvBvF7DORtFUWXQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDrIxQ/tq3NQgOkPINDQHDHU4752j0xGx+wqGEbtWGxA/P1Lc79qruBQ9mSywr3OKQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5b51e40b-dc10-4930-8482-591d50c09635",
+                            SecurityStamp = "91b5894e-ade6-4007-b800-2e2fa25691c3",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
