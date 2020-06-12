@@ -91,21 +91,23 @@ namespace TodoListApp.Services
             if (!isPasswordValid)
                 throw new Exception("Invalid Username or Password");
 
-            var jwtToken = generateJwtToken(user);
+            var jwtToken = await generateJwtToken(user);
             return jwtToken;
         }
 
-        private string generateJwtToken(User user)
+        private async Task<string> generateJwtToken(User user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.UserName) };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, "Admin"),
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
