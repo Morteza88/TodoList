@@ -8,8 +8,9 @@ namespace TodoListApp.Services
 {
     public interface ITaskService
     {
-        Task<Models.Task> InsertAsync(TaskDto taskDto);
-        Task<Models.Task> GetByUserId(Guid userId);
+        Task<Models.Task> CreateTaskAsync(TaskDto taskDto);
+        Task<IEnumerable<Models.Task>> GetAllTasksAsync();
+        Task<IEnumerable<Models.Task>> GetCurrentUserTasksAsync();
 
     }
 }

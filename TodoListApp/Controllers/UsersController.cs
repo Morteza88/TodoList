@@ -1,157 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TodoListApp.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using TodoListApp.Models;
+using TodoListApp.Models.Dtos;
 using TodoListApp.Models.DTOs;
+using TodoListApp.Services;
 
 namespace TodoListApp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        //private readonly UserManager<User> _userManager;
-        //private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
+        private IConfiguration _config;
+        private readonly ILogger<WeatherForecastController> _logger;
 
-        //public UsersController(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
-        //{
-        //    _userManager = userManager;
-        //    _httpContextAccessor = httpContextAccessor;
-        //}
+        public UsersController(UserManager<User> userManager, IUserService userService, IConfiguration config, ILogger<WeatherForecastController> logger)
+        {
+            _userManager = userManager;
+            _userService = userService;
+            _config = config;
+            _logger = logger;
+        }
 
-        //// GET: api/Users
-        //[HttpGet]
-        ////[Authorize(Roles = "Admin")]
-        //public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-        //{
-        //    return await _userManager.Users.ToListAsync();
-        //}
-
-        //// GET: api/Users/5
-        //[HttpGet("{id}")]
+        // GET: api/Users
+        [HttpGet]
         //[Authorize(Roles = "Admin")]
-        //public async Task<ActionResult<User>> GetUser(Guid id)
-        //{
-        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return user;
-        //}
+        public async Task<IEnumerable<User>> GetUsers()
+        {
+            return await _userService.GetUsersAsync();
+        }
 
-        //[HttpGet("[action]")]
-        //[Authorize(Roles = "Employee")]
-        //public async Task<ActionResult<User>> GetMyUser(Guid id)
-        //{
-        //    var claims = _httpContextAccessor.HttpContext.User.Claims.ToList();
-        //    string userName = null;
-        //    foreach (var claim in claims)
-        //    {
-        //        if (claim.Type==ClaimTypes.Name)
-        //        {
-        //            userName = claim.Value;
-        //        }
-        //    }
+        // POST: api/Users
+        [HttpPost]
+        public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
+        {
+            var user = await _userService.CreateAccountAsync(createUserDto);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            return Ok(user);
+        }
 
-        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return user;
-        //}
+        // POST: api/Users/Authenticate
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Authenticate(AuthenticateRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.Username);
+            if (user == null)
+                return BadRequest("Invalid Username or Password");
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutUser(Guid id, CreateUserDto userDto)
-        //{
-        //    var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    user.UserName = userDto.UserName;
-        //    //user.Password = userDto.Password;
-        //    user.Email = userDto.Email;
-        //    user.FullName = userDto.FullName;
-        //    var result = await _userManager.UpdateAsync(user);
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            if (!isPasswordValid)
+                return BadRequest("Invalid Username or Password");
 
-        //    if (result != IdentityResult.Success)
-        //    {
-        //        return BadRequest(result.Errors);
-        //    }
+            var jwtToken = generateJwtToken(user);
+            return Ok(jwtToken);
+        }
 
-        //    return NoContent();
-        //}
-
-        //[HttpPost]
-        //public async Task<ActionResult<User>> PostUser(CreateUserDto userDto)
-        //{
-        //    var user = new User
-        //    {
-        //        UserName = userDto.UserName,
-        //        FullName = userDto.FullName,
-        //        Email = userDto.Email
-        //    };
-        //    var result = await _userManager.CreateAsync(user, userDto.Password);
-        //    if (result != IdentityResult.Success)
-        //    {
-        //        return BadRequest(result.Errors);
-        //    }
-        //    var result2 = await _userManager.AddToRoleAsync(user, "Employee");
-        //    if (result2 != IdentityResult.Success)
-        //    {
-        //        return BadRequest(result2.Errors);
-        //    }
-        //    return Ok(user);
-
-        //    //return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<User>> DeleteUser(Guid id)
-        //{
-        //    // Look for user in the UserStore
-        //    var user = _userManager.Users.SingleOrDefault(u => u.Id == id);
-
-        //    // If not found, exit
-        //    if (user == null)
-        //    {
-        //        return BadRequest("User not found");
-        //    }
-
-        //    // Get user roles!
-        //    var roles = await _userManager.GetRolesAsync(user);
-        //    // Remove user from roles
-        //    foreach (var role in roles)
-        //    {
-        //        var removeFromRole = await _userManager.RemoveFromRoleAsync(user, role);
-        //        if (removeFromRole != IdentityResult.Success)
-        //        {
-        //            return BadRequest(removeFromRole.Errors);
-        //        }
-        //    }
-
-        //    // Remove user from UserStore
-        //    var result = await _userManager.DeleteAsync(user);
-        //    if (result != IdentityResult.Success)
-        //    {
-        //        return BadRequest(result.Errors);
-        //    }
-        //    return Ok(user);
-        //}
-
-        //private bool UserExists(Guid id)
-        //{
-        //    return _userManager.Users.Any(u => u.Id == id);
-        //}
+        private string generateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Role, "Admin"),
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 }

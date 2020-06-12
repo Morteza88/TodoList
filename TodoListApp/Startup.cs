@@ -64,7 +64,7 @@ namespace TodoListApp
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(ITaskRepository), typeof(TaskRepository));
             services.AddScoped(typeof(ITaskService), typeof(TaskService));
-            services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            services.AddScoped(typeof(IUserService), typeof(UserService));
 
             services.AddSwaggerGen(c =>
             {

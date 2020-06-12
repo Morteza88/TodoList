@@ -24,34 +24,33 @@ namespace TodoListApp.Controllers
             _taskService = taskService;
         }
 
-        //// GET: api/Tasks
-        //[HttpGet]
-        //public async Task<IEnumerable<Models.Task>> GetUserTasks(Guid UserId)
-        //{
-        //    return await _taskRepository.GetAll();
-        //}
-        //[HttpGet]
-        //public async Task<IEnumerable<Models.Task>> GetTaskItems()
-        //{
-        //    return await _taskRepository.GetAll();
-        //}
-
-        [HttpPost]
-        public async Task<ActionResult> PostTask(TaskDto taskDto)
+        // GET: api/Tasks
+        [HttpGet]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IEnumerable<Models.Task>> GetAllTasks()
         {
-            var task =  await _taskService.InsertAsync(taskDto);
+            return await _taskService.GetAllTasksAsync();
+        }
+
+        // GET: api/Tasks/GetMyTasks
+        [HttpGet("[action]")]
+        //[Authorize(Roles = "Employee")]
+        public async Task<IEnumerable<Models.Task>> GetMyTasks()
+        {
+            return await _taskService.GetCurrentUserTasksAsync();
+        }
+
+        // GET: api/Tasks
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CreateTask(TaskDto taskDto)
+        {
+            var task =  await _taskService.CreateTaskAsync(taskDto);
             if (task == null)
             {
                 return BadRequest();
             }
             return Ok();
         }
-
-        // DELETE: api/Tasks/5
-        //[HttpDelete("{id}")]
-        //public async Task<int> DeleteTask(Guid id)
-        //{
-        //    return await _taskRepository.Delete(id);
-        //}
     }
 }

@@ -61,7 +61,7 @@ namespace TodoListApp.Data
                 }
             );
         }
-        public DbSet<Models.Task> TaskIts { get; set; }
-        public DbSet<SubTask> SubTaskItems { get; set; }
+        public DbSet<Models.Task> Tasks { get; set; }
+        public DbSet<SubTask> SubTasks { get; set; }
     }
 }

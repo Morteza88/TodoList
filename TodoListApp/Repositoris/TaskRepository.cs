@@ -12,9 +12,9 @@ namespace TodoListApp.Repositoris
     {
         public TaskRepository(TodoListDBContext context) : base(context) { }
 
-        public Task<Models.Task> GetByUser(User user)
+        public Task<List<Models.Task>> GetTasksByUserAsync(User user)
         {
-            return context.Set<Models.Task>().FirstOrDefaultAsync(tast => tast.User == user);
+            return context.Set<Models.Task>().Where(tast => tast.User == user).ToListAsync();
         }
     }
 }

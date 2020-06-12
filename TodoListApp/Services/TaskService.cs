@@ -14,27 +14,16 @@ namespace TodoListApp.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepository;
-        private readonly IAccountService _accountService;
+        private readonly IUserService _userService;
 
-        public TaskService(ITaskRepository taskRepository, IAccountService accountService)
+        public TaskService(ITaskRepository taskRepository, IUserService userService)
         {
             _taskRepository = taskRepository;
-            _accountService = accountService;
+            _userService = userService;
         }
-
-        public async Task<Models.Task> GetByUserId(Guid userId)
+        public async Task<Models.Task> CreateTaskAsync(TaskDto taskDto)
         {
-            var user = await _accountService.GetUserById(userId);
-            if (user == null)
-            {
-                throw new ArgumentNullException("user");
-            }
-            return await _taskRepository.GetByUser(user);
-        }
-
-        public async Task<Models.Task> InsertAsync(TaskDto taskDto)
-        {
-            var user = await _accountService.GetUserById(taskDto.UserId);
+            var user = await _userService.GetUserByIdAsync(taskDto.UserId);
             if (user == null)
             {
                 throw new ArgumentNullException("user");
@@ -50,5 +39,20 @@ namespace TodoListApp.Services
             await _taskRepository.Insert(task);
             return task;
         }
+
+        public async Task<IEnumerable<Models.Task>> GetAllTasksAsync()
+        {
+            return await _taskRepository.GetAll();
+        }
+        public async Task<IEnumerable<Models.Task>> GetCurrentUserTasksAsync()
+        {
+            var user = await _userService.GetCurrentUserAsync();
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            return await _taskRepository.GetTasksByUserAsync(user);
+        }
+
     }
 }

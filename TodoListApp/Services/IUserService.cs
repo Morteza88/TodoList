@@ -8,10 +8,11 @@ using TodoListApp.Models.DTOs;
 
 namespace TodoListApp.Services
 {
-    public interface IAccountService
+    public interface IUserService
     {
-        Task<User> GetUserById(Guid id);
-        Task<User> GetCurrentUser();
+        Task<IEnumerable<User>> GetUsersAsync();
+        Task<User> GetUserByIdAsync(Guid id);
+        Task<User> GetCurrentUserAsync();
         Task<User> CreateAccountAsync(CreateUserDto createUserDto);
     }
 }

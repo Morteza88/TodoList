@@ -12,17 +12,21 @@ using TodoListApp.Models.DTOs;
 
 namespace TodoListApp.Services
 {
-    public class AccountService : IAccountService
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        public UserService(UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<User> GetCurrentUser()
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+        public async Task<User> GetCurrentUserAsync()
         {
             var claims = _httpContextAccessor.HttpContext.User.Claims.ToList();
             string userName = null;
@@ -40,7 +44,7 @@ namespace TodoListApp.Services
             }
             return user;
         }
-        public async Task<User> GetUserById(Guid id)
+        public async Task<User> GetUserByIdAsync(Guid id)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)

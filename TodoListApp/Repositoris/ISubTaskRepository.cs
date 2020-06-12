@@ -6,8 +6,8 @@ using TodoListApp.Models;
 
 namespace TodoListApp.Repositoris
 {
-    public interface ITaskRepository :IRepository<Models.Task>
+    public interface ISubTaskRepository : IRepository<SubTask>
     {
-        Task<List<Models.Task>> GetTasksByUserAsync(User user);
+        Task<List<SubTask>> GetSubTasksByTaskAsync(Models.Task task);
     }
 }
